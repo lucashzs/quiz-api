@@ -8,38 +8,36 @@ import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 
 @Table(name = User.TABLE_NAME)
 @Entity
 public class User implements UserDetails {
     public static final String TABLE_NAME = "users-quiz";
 
+    @OneToMany(mappedBy = "user")
+    private Set<Quiz> quizzes;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @NotNull
+
     private String username;
 
-    @NotBlank
-    @NotNull
+
     @Column(unique = true)
     private String nickname;
 
-    @NotBlank
-    @NotNull
+
     @Column(unique = true)
     private String email;
 
-    @NotBlank
-    @NotNull
+
     @Size(min = 8)
     private String password;
 
-    @NotNull
+
     private String birthDate;
 
     public User(RegisterUserDto registerUserDto, String encryptPassword) {
@@ -107,6 +105,14 @@ public class User implements UserDetails {
 
     public static User fromEntity(User user) {
         return user;
+    }
+
+    public Set<Quiz> getQuizzes() {
+        return quizzes;
+    }
+
+    public void setQuizzes(Set<Quiz> quizzes) {
+        this.quizzes = quizzes;
     }
 
     @Override

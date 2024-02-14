@@ -17,7 +17,6 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
-//    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody @Valid LoginUserDto loginUserDto) {
         return this.authenticationService.login(loginUserDto);

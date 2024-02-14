@@ -9,9 +9,8 @@ import com.api.quiz.repositories.UserRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,9 +23,11 @@ import static com.api.quiz.services.VerificationsService.*;
 @Service
 public class AuthenticationService {
 
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    public AuthenticationService(UserRepository userRepository) {
+    public AuthenticationService(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+        this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
     }
 
@@ -55,7 +56,7 @@ public class AuthenticationService {
             }
             if (this.userRepository.findByEmail(registrationData.email()).isPresent())
                 throw new BadRequestException("Email already exists!");
-            newUser = new User(registrationData, EncryptPasswordService.encryptPassword(registrationData.password()));
+            newUser = new User(registrationData, passwordEncoder.encode(registrationData.password()));
         } else {
             throw new BadRequestException("Passwords do not match!");
         }
@@ -72,7 +73,6 @@ public class AuthenticationService {
         if (!new BCryptPasswordEncoder().matches(loginData.password(), user.getPassword())) {
             throw new UnauthorizedException("Invalid email or password!");
         }
-//        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, loginData, user.getAuthorities()));
         return ResponseEntity.ok().body("Login Successfully");
     }
 }
