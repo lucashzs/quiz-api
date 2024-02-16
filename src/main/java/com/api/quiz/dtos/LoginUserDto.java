@@ -1,4 +1,8 @@
 package com.api.quiz.dtos;
 
-public record LoginUserDto(String email, String password) {
+import jakarta.validation.constraints.NotBlank;
+
+public record LoginUserDto(
+        @NotBlank (message = "An email is required to login!") String email,
+        @NotBlank (message = "An password is required to login!") String password) {
 }

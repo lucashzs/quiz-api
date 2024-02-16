@@ -29,6 +29,7 @@ public class QuizService {
     public ResponseEntity<Object> createDirectAnswer(QuizDto quizDto) {
         var newQuiz = new Quiz(quizDto);
         Optional<User> user = this.userRepository.findById(quizDto.userId());
+
         if (newQuiz.getVisibility().equalsIgnoreCase("private")) {
             if (newQuiz.getAccessPassword().isEmpty()) {
                 throw new BadRequestException("Access password is required for private quiz!");
