@@ -4,8 +4,6 @@ import com.api.quiz.dtos.QuestionDto;
 import com.api.quiz.enums.QuestionType;
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Entity
 public class Question {
 
@@ -39,8 +37,9 @@ public class Question {
         return questionType;
     }
 
-    public void setQuestionType(QuestionType questionType) {
+    public QuestionType setQuestionType(QuestionType questionType) {
         this.questionType = questionType;
+        return questionType;
     }
 
     public Long getId() {

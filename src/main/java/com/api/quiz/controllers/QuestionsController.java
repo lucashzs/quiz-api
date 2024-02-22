@@ -20,4 +20,9 @@ public class QuestionsController {
     public ResponseEntity<Object> createQuestionsDirect (@RequestBody @Valid QuestionDto questionDto, @PathVariable Long quizId){
         return this.questionsService.createDirectQuestions(questionDto, quizId);
     }
+
+    @PostMapping("/true-or-false")
+    public ResponseEntity<Object> createTrueOrFalseQuestion (@RequestBody @Valid QuestionDto questionDto, @PathVariable Long quizId){
+        return this.questionsService.createTrueOrFalseQuestion(questionDto, quizId);
+    }
 }
