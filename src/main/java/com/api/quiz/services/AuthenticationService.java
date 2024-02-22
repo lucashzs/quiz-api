@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -69,7 +70,6 @@ public class AuthenticationService {
         }
 
         this.userRepository.save(newUser);
-
         return ResponseEntity.status(HttpStatus.CREATED).body("Created Successfully!");
     }
 
@@ -93,5 +93,13 @@ public class AuthenticationService {
         SecurityContextHolder.setContext(securityContext);
 
         return ResponseEntity.ok().body("Login Successfully");
+    }
+
+    public User getCurrentUser() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        return userRepository.findByfullName(authentication.getName())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 }

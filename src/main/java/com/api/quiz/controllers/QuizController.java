@@ -18,8 +18,8 @@ public class QuizController {
         this.quizService = quizService;
     }
 
-    @PostMapping("/directQuestions")
-    public ResponseEntity<Object> createDirectAnswer (@RequestBody @Valid QuizDto quizDto){
-        return this.quizService.createDirectAnswer(quizDto);
+    @PostMapping("/create")
+    public ResponseEntity<Object> create (@RequestBody @Valid QuizDto quizDto){
+        return this.quizService.createQuiz(quizDto);
     }
 }

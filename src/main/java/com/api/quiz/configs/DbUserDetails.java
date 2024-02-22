@@ -2,9 +2,11 @@ package com.api.quiz.configs;
 
 import com.api.quiz.entities.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 
 public class DbUserDetails implements UserDetails {
 
@@ -17,7 +19,7 @@ public class DbUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return List.of(new SimpleGrantedAuthority("USER"));
     }
 
     @Override
@@ -27,7 +29,7 @@ public class DbUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return user.getFullName();
     }
 
     @Override

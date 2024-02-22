@@ -47,7 +47,7 @@ public class UserService {
         }
         newUser.setBirthDate(String.valueOf(userDto.birthDate()));
         newUser.setNickname(userDto.nickname());
-        newUser.setUsername(userDto.username());
+        newUser.setFullName(userDto.fullName());
         this.userRepository.save(newUser);
         return ResponseEntity.status(HttpStatus.OK).body("Update Successfully");
     }

@@ -1,22 +1,47 @@
 package com.api.quiz.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.api.quiz.dtos.QuestionDto;
+import com.api.quiz.enums.QuestionType;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Question {
+
+    @ManyToOne
+    @JoinColumn (name = "quiz_id")
+    private Quiz quiz;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    private QuestionType questionType;
+
     private String questionText;
 
-    private String userAnswer;
-
     private String correctAnswer;
+
+    public Question(QuestionDto questionDto, Quiz quiz) {
+       this.questionText = questionDto.questionText();
+       this.correctAnswer = questionDto.correctAnswer();
+       this.questionType = questionDto.questionType();
+       this.quiz = quiz;
+    }
+
+    public Question() {
+
+    }
+
+    public QuestionType getQuestionType() {
+        return questionType;
+    }
+
+    public void setQuestionType(QuestionType questionType) {
+        this.questionType = questionType;
+    }
 
     public Long getId() {
         return id;
@@ -34,19 +59,18 @@ public class Question {
         this.questionText = questionText;
     }
 
-    public String getUserAnswer() {
-        return userAnswer;
-    }
-
-    public void setUserAnswer(String userAnswer) {
-        this.userAnswer = userAnswer;
-    }
-
     public String getCorrectAnswer() {
         return correctAnswer;
     }
 
     public void setCorrectAnswer(String correctAnswer) {
         this.correctAnswer = correctAnswer;
+    }
+
+    public Quiz getQuiz() {
+        return quiz;
+    }
+
+    public void setQuiz(Quiz quiz) {
     }
 }

@@ -1,28 +1,25 @@
 package com.api.quiz.entities;
 
 
+import com.api.quiz.dtos.QuestionDto;
 import com.api.quiz.dtos.QuizDto;
 import jakarta.persistence.*;
 
 
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 public class Quiz {
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "quiz_id")
+    @OneToMany(mappedBy = "quiz",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> questions;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
 
     @Column(unique = true)
     private String nameQuiz;
@@ -30,6 +27,7 @@ public class Quiz {
     private String visibility;
 
     private String accessPassword;
+
 
     public Quiz(QuizDto quizDto) {
         this.nameQuiz = quizDto.nameQuiz();
@@ -40,16 +38,7 @@ public class Quiz {
     public Quiz() {
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Quiz that)) return false;
-        return Objects.equals(getId(), that.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
+    public Quiz(QuestionDto questionDto) {
     }
 
     public Long getId() {
@@ -100,11 +89,4 @@ public class Quiz {
         this.questions = questions;
     }
 
-    public Quiz(User user, Long id, String nameQuiz, String visibility, String accessPassword) {
-        this.user = user;
-        this.id = id;
-        this.nameQuiz = nameQuiz;
-        this.visibility = visibility;
-        this.accessPassword = accessPassword;
-    }
 }

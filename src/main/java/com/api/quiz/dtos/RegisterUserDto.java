@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 public record RegisterUserDto(
-        @NotBlank(message = "An username is required to register!") String username,
+        @NotBlank(message = "An username is required to register!") String fullName,
         @NotBlank(message = "An nickname is required to register!") String nickname,
         @Email(message = "Email address sent in an invalid format!")
         @NotBlank(message = "An email is required to register!") String email,

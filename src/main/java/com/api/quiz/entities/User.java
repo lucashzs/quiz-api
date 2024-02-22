@@ -2,11 +2,7 @@ package com.api.quiz.entities;
 
 import com.api.quiz.dtos.RegisterUserDto;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
 
@@ -23,7 +19,7 @@ public class User{
     private Long id;
 
 
-    private String username;
+    private String fullName;
 
 
     @Column(unique = true)
@@ -44,23 +40,11 @@ public class User{
         this.birthDate = registerUserDto.birthDate();
         this.email = registerUserDto.email();
         this.password = encryptPassword;
-        this.username = registerUserDto.username();
+        this.fullName = registerUserDto.fullName();
         this.nickname = registerUserDto.nickname();
     }
 
     public User() {
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User user)) return false;
-        return Objects.equals(getId(), user.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
     }
 
     public Long getId() {
@@ -71,8 +55,8 @@ public class User{
         this.id = id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setFullName(String username) {
+        this.fullName = username;
     }
 
     public String getNickname() {
@@ -115,10 +99,9 @@ public class User{
         this.quizzes = quizzes;
     }
 
-    public String getUsername() {
-        return username;
+    public String getFullName() {
+        return fullName;
     }
-
     public String getPassword() {
         return password;
     }
