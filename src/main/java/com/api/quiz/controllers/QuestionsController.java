@@ -25,4 +25,9 @@ public class QuestionsController {
     public ResponseEntity<Object> createTrueOrFalseQuestion (@RequestBody @Valid QuestionDto questionDto, @PathVariable Long quizId){
         return this.questionsService.createTrueOrFalseQuestion(questionDto, quizId);
     }
+
+    @PostMapping("/alternative")
+    public ResponseEntity<Object> createAlternativeQuestion (@RequestBody @Valid QuestionDto questionDto, @PathVariable Long quizId){
+        return  this.questionsService.createAlternativeQuestion(questionDto, quizId);
+    }
 }

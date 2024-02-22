@@ -40,4 +40,14 @@ public class QuestionsService {
         this.questionsRepository.save(newQuestion);
         return ResponseEntity.status(HttpStatus.CREATED).body("Created Question Successfully!");
     }
+
+    public ResponseEntity<Object> createAlternativeQuestion (QuestionDto questionDto, Long quizId){
+        Quiz quiz = quizService.findById(quizId);
+        var newQuestion = new Question(questionDto, quiz);
+
+        newQuestion.setQuestionType(QuestionType.ALTERNATIVE_QUESTION);
+
+        this.questionsRepository.save(newQuestion);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Created Question Successfully!");
+    }
 }
