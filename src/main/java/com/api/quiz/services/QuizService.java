@@ -1,13 +1,19 @@
 package com.api.quiz.services;
 
+import com.api.quiz.dtos.QuizAnswerDto;
 import com.api.quiz.dtos.QuizDto;
+import com.api.quiz.entities.Question;
 import com.api.quiz.entities.Quiz;
 import com.api.quiz.errors.exceptions.BadRequestException;
 import com.api.quiz.errors.exceptions.NotFoundException;
 import com.api.quiz.repositories.QuizRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuizService {
@@ -20,10 +26,28 @@ public class QuizService {
         this.authenticationService = authenticationService;
     }
 
-    public Quiz findById(Long id){
-        return this.quizRepository.findById(id).orElseThrow(() -> new NotFoundException("Quiz Not Found! ID:" + id));
+    public Quiz findById(Long quiz) {
+        return this.quizRepository.findById(quiz)
+                .orElseThrow(() -> new NotFoundException("Quiz Not Found"));
     }
 
+
+    public ResponseEntity<QuizDto> getQuizById(Long id) {
+        QuizDto quizDto =
+                quizRepository.findById(id)
+                        .map(QuizDto::new).orElseThrow(() -> new NotFoundException("Quiz Not Found"));
+        return ResponseEntity.ok(quizDto);
+
+    }
+
+    @Transactional
+    public ResponseEntity<List<QuizDto>> getAllQuiz() {
+        List<QuizDto> quizzes = quizRepository.findAll()
+                .stream()
+                .map(QuizDto::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(quizzes);
+    }
 
     public ResponseEntity<Object> createQuiz(QuizDto quizDto) {
         var currentUser = authenticationService.getCurrentUser();
@@ -44,15 +68,17 @@ public class QuizService {
     }
 
 
-//    public boolean checkQuizAnswers(QuizAnswerDto answer) {
-//        Quiz quiz = quizRepository.findById(answer.getQuizId())
-//                .orElseThrow(() -> new BadRequestException("Quiz not found"));
-//
-//        for (Question question : quiz.getQuestions()) {
-//            if (!question.getCorrectAnswer().equals(answer.getAnswers().get(question.getId()))) {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
+    public boolean checkQuizAnswers(QuizAnswerDto answer) {
+        Quiz quiz = quizRepository.findById(answer.getQuizId())
+                .orElseThrow(() -> new BadRequestException("Quiz not found"));
+
+        boolean allAnswersCorrect = true;
+
+        for (Question question : quiz.getQuestions()) {
+            if (!question.getCorrectAnswer().equals(answer.getAnswers().get(question.getId()))) {
+                allAnswersCorrect = false;
+            }
+        }
+        return allAnswersCorrect;
+    }
 }

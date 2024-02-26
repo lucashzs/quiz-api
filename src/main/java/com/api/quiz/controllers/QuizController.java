@@ -1,13 +1,13 @@
 package com.api.quiz.controllers;
 
+import com.api.quiz.dtos.QuizAnswerDto;
 import com.api.quiz.dtos.QuizDto;
 import com.api.quiz.services.QuizService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/quiz")
@@ -21,5 +21,21 @@ public class QuizController {
     @PostMapping("/create")
     public ResponseEntity<Object> create (@RequestBody @Valid QuizDto quizDto){
         return this.quizService.createQuiz(quizDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<QuizDto>> getAllQuizzes() {
+      return this.quizService.getAllQuiz();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<QuizDto> getQuizById(@PathVariable Long id) {
+        return this.quizService.getQuizById(id);
+    }
+
+    @PostMapping("/{quizId}/answers")
+    public ResponseEntity<Boolean> answerQuiz(@PathVariable Long quizId, @RequestBody QuizAnswerDto answers) {
+        boolean isCorrect = quizService.checkQuizAnswers(answers);
+        return ResponseEntity.ok(isCorrect);
     }
 }

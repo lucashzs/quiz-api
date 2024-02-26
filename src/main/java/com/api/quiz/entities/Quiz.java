@@ -14,7 +14,7 @@ public class Quiz {
     @ManyToOne
     private User user;
 
-    @OneToMany(mappedBy = "quiz",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "quiz",fetch = FetchType.LAZY)
     private List<Question> questions;
 
     @Id

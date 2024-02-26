@@ -2,6 +2,7 @@ package com.api.quiz.entities;
 
 import com.api.quiz.dtos.QuestionDto;
 import com.api.quiz.enums.QuestionType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -71,5 +72,6 @@ public class Question {
     }
 
     public void setQuiz(Quiz quiz) {
+        this.quiz = quiz;
     }
 }

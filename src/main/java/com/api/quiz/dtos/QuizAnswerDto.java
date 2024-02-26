@@ -3,6 +3,7 @@ package com.api.quiz.dtos;
 import java.util.Map;
 
 public class QuizAnswerDto {
+
     private String userName;
     private Map<Long, String> answers;
     private Long quizId;

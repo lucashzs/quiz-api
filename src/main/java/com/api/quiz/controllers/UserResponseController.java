@@ -14,10 +14,10 @@ public class UserResponseController {
     public UserResponseController(QuizService quizService){
         this.quizService = quizService;
     }
-//
-//    @PostMapping("/answerQuiz")
-//    public ResponseEntity<Boolean> answerQuiz(@RequestBody QuizAnswerDto quizAnswerDto) {
-//        boolean isCorrect = quizService.checkQuizAnswers(quizAnswerDto);
-//        return ResponseEntity.ok(isCorrect);
-//    }
+
+    @PostMapping("/answerQuiz")
+    public ResponseEntity<Boolean> answerQuiz(@RequestBody QuizAnswerDto quizAnswerDto) {
+        boolean isCorrect = quizService.checkQuizAnswers(quizAnswerDto);
+        return ResponseEntity.ok(isCorrect);
+    }
 }
