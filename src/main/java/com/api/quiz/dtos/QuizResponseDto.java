@@ -1,7 +1,5 @@
 package com.api.quiz.dtos;
 
-import com.api.quiz.entities.Question;
-
 import java.util.List;
 
 public class QuizResponseDto {
