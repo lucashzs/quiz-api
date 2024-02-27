@@ -75,25 +75,24 @@ public class QuizService {
         Quiz quiz = quizRepository.findById(answer.getQuizId())
                 .orElseThrow(() -> new BadRequestException("Quiz not found!"));
 
-        List<QuestionDto> incorrectQuestionsDto = new ArrayList<>();
+        List<QuestionDto> incorrectQuestions = new ArrayList<>();
 
         for (Question question : quiz.getQuestions()) {
             if (!question.getCorrectAnswer().equalsIgnoreCase(answer.getAnswers().get(question.getId()))) {
                 QuestionDto questionDto = new QuestionDto(question, question.getId());
-                incorrectQuestionsDto.add(questionDto);
+                incorrectQuestions.add(questionDto);
             }
-        }
 
+        }
         QuizResponseDto response = new QuizResponseDto();
 
-        if (incorrectQuestionsDto.isEmpty()) {
+        if (incorrectQuestions.isEmpty()) {
             response.setMessage("Correct answers!");
         } else {
-            response.setMessage("Wrong answers!");
+            response.setMessage("There are wrong answers!");
         }
 
-        response.setIncorrectQuestion(incorrectQuestionsDto);
-
+        response.setIncorrectQuestion(incorrectQuestions);
         return ResponseEntity.ok(response);
     }
 }

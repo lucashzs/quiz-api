@@ -1,7 +1,10 @@
 package com.api.quiz.dtos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class QuizResponseDto {
     private String message;
     private List<QuestionDto> incorrectQuestion;
