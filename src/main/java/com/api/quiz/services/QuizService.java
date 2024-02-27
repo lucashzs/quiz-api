@@ -1,7 +1,9 @@
 package com.api.quiz.services;
 
+import com.api.quiz.dtos.QuestionDto;
 import com.api.quiz.dtos.QuizAnswerDto;
 import com.api.quiz.dtos.QuizDto;
+import com.api.quiz.dtos.QuizResponseDto;
 import com.api.quiz.entities.Question;
 import com.api.quiz.entities.Quiz;
 import com.api.quiz.errors.exceptions.BadRequestException;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +34,6 @@ public class QuizService {
                 .orElseThrow(() -> new NotFoundException("Quiz Not Found"));
     }
 
-
     public ResponseEntity<QuizDto> getQuizById(Long id) {
         QuizDto quizDto =
                 quizRepository.findById(id)
@@ -48,6 +50,7 @@ public class QuizService {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(quizzes);
     }
+
 
     public ResponseEntity<Object> createQuiz(QuizDto quizDto) {
         var currentUser = authenticationService.getCurrentUser();
@@ -68,17 +71,29 @@ public class QuizService {
     }
 
 
-    public boolean checkQuizAnswers(QuizAnswerDto answer) {
+    public ResponseEntity<QuizResponseDto> checkQuizAnswers(QuizAnswerDto answer) {
         Quiz quiz = quizRepository.findById(answer.getQuizId())
-                .orElseThrow(() -> new BadRequestException("Quiz not found"));
+                .orElseThrow(() -> new BadRequestException("Quiz not found!"));
 
-        boolean allAnswersCorrect = true;
+        List<QuestionDto> incorrectQuestionsDto = new ArrayList<>();
 
         for (Question question : quiz.getQuestions()) {
-            if (!question.getCorrectAnswer().equals(answer.getAnswers().get(question.getId()))) {
-                allAnswersCorrect = false;
+            if (!question.getCorrectAnswer().equalsIgnoreCase(answer.getAnswers().get(question.getId()))) {
+                QuestionDto questionDto = new QuestionDto(question, question.getId());
+                incorrectQuestionsDto.add(questionDto);
             }
         }
-        return allAnswersCorrect;
+
+        QuizResponseDto response = new QuizResponseDto();
+
+        if (incorrectQuestionsDto.isEmpty()) {
+            response.setMessage("Correct answers!");
+        } else {
+            response.setMessage("Wrong answers!");
+        }
+
+        response.setIncorrectQuestion(incorrectQuestionsDto);
+
+        return ResponseEntity.ok(response);
     }
 }

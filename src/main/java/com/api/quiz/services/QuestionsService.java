@@ -1,11 +1,9 @@
 package com.api.quiz.services;
 
 import com.api.quiz.dtos.QuestionDto;
-import com.api.quiz.dtos.QuizDto;
 import com.api.quiz.entities.Question;
 import com.api.quiz.entities.Quiz;
 import com.api.quiz.enums.QuestionType;
-import com.api.quiz.errors.exceptions.NotFoundException;
 import com.api.quiz.repositories.QuestionsRepository;
 import com.api.quiz.repositories.QuizRepository;
 import org.springframework.http.HttpStatus;
@@ -27,7 +25,7 @@ public class QuestionsService {
     }
 
     public ResponseEntity<Object> createDirectQuestions(QuestionDto questionDto, Long quizId) {
-        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new NotFoundException("Quiz Not Found"));
+        Quiz quiz = quizService.findById(quizId);
         var newQuestion = new Question(questionDto, quiz);
 
         newQuestion.setQuestionType(QuestionType.DIRECT_QUESTION);
