@@ -8,7 +8,7 @@ import java.util.*;
 
 @Table(name = User.TABLE_NAME)
 @Entity
-public class User{
+public class User {
     public static final String TABLE_NAME = "users-quiz";
 
     @OneToMany(mappedBy = "user")
@@ -18,21 +18,16 @@ public class User{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private String fullName;
-
 
     @Column(unique = true)
     private String nickname;
 
-
     @Column(unique = true)
     private String email;
 
-
     @Size(min = 8)
     private String password;
-
 
     private String birthDate;
 
@@ -102,6 +97,7 @@ public class User{
     public String getFullName() {
         return fullName;
     }
+
     public String getPassword() {
         return password;
     }

@@ -2,14 +2,13 @@ package com.api.quiz.entities;
 
 import com.api.quiz.dtos.QuestionDto;
 import com.api.quiz.enums.QuestionType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
 public class Question {
 
     @ManyToOne
-    @JoinColumn (name = "quiz_id")
+    @JoinColumn(name = "quiz_id")
     private Quiz quiz;
 
     @Id
@@ -24,10 +23,10 @@ public class Question {
     private String correctAnswer;
 
     public Question(QuestionDto questionDto, Quiz quiz) {
-       this.questionText = questionDto.questionText();
-       this.correctAnswer = questionDto.correctAnswer();
-       this.questionType = questionDto.questionType();
-       this.quiz = quiz;
+        this.questionText = questionDto.questionText();
+        this.correctAnswer = questionDto.correctAnswer();
+        this.questionType = questionDto.questionType();
+        this.quiz = quiz;
     }
 
     public Question() {

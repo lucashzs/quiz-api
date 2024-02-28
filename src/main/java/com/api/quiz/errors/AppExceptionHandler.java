@@ -50,5 +50,4 @@ public class AppExceptionHandler {
     public ResponseEntity<Object> handleUnauthorizedException(UnauthorizedException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
-
 }

@@ -17,17 +17,17 @@ public class QuestionsController {
     }
 
     @PostMapping("/direct")
-    public ResponseEntity<Object> createQuestionsDirect (@RequestBody @Valid QuestionDto questionDto, @PathVariable Long quizId){
+    public ResponseEntity<Object> createQuestionsDirect(@RequestBody @Valid QuestionDto questionDto, @PathVariable Long quizId) {
         return this.questionsService.createDirectQuestions(questionDto, quizId);
     }
 
     @PostMapping("/true-or-false")
-    public ResponseEntity<Object> createTrueOrFalseQuestion (@RequestBody @Valid QuestionDto questionDto, @PathVariable Long quizId){
+    public ResponseEntity<Object> createTrueOrFalseQuestion(@RequestBody @Valid QuestionDto questionDto, @PathVariable Long quizId) {
         return this.questionsService.createTrueOrFalseQuestion(questionDto, quizId);
     }
 
     @PostMapping("/alternative")
-    public ResponseEntity<Object> createAlternativeQuestion (@RequestBody @Valid QuestionDto questionDto, @PathVariable Long quizId){
-        return  this.questionsService.createAlternativeQuestion(questionDto, quizId);
+    public ResponseEntity<Object> createAlternativeQuestion(@RequestBody @Valid QuestionDto questionDto, @PathVariable Long quizId) {
+        return this.questionsService.createAlternativeQuestion(questionDto, quizId);
     }
 }

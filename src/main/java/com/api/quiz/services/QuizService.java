@@ -77,7 +77,7 @@ public class QuizService {
 
         if (quiz.getVisibility().equalsIgnoreCase("private")) {
             if (answer.getAccessPassword().isEmpty()) {
-                throw new BadRequestException("This Quiz is private, you need to enter a password!");
+                throw new BadRequestException("This Quiz is private, you need to enter a access password!");
             }
             if (!answer.getAccessPassword().equalsIgnoreCase(quiz.getAccessPassword())) {
                 throw new BadRequestException("Incorrect access password!");

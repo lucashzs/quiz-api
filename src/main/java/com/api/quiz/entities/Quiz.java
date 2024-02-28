@@ -1,10 +1,8 @@
 package com.api.quiz.entities;
 
-
 import com.api.quiz.dtos.QuestionDto;
 import com.api.quiz.dtos.QuizDto;
 import jakarta.persistence.*;
-
 
 import java.util.List;
 
@@ -14,7 +12,7 @@ public class Quiz {
     @ManyToOne
     private User user;
 
-    @OneToMany(mappedBy = "quiz",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "quiz", fetch = FetchType.LAZY)
     private List<Question> questions;
 
     @Id
