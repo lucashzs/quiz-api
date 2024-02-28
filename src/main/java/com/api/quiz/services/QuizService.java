@@ -75,6 +75,15 @@ public class QuizService {
         Quiz quiz = quizRepository.findById(answer.getQuizId())
                 .orElseThrow(() -> new BadRequestException("Quiz not found!"));
 
+        if (quiz.getVisibility().equalsIgnoreCase("private")) {
+            if (answer.getAccessPassword().isEmpty()) {
+                throw new BadRequestException("This Quiz is private, you need to enter a password!");
+            }
+            if (!answer.getAccessPassword().equalsIgnoreCase(quiz.getAccessPassword())) {
+                throw new BadRequestException("Incorrect access password!");
+            }
+        }
+
         List<QuestionDto> incorrectQuestions = new ArrayList<>();
 
         for (Question question : quiz.getQuestions()) {
@@ -82,7 +91,6 @@ public class QuizService {
                 QuestionDto questionDto = new QuestionDto(question, question.getId());
                 incorrectQuestions.add(questionDto);
             }
-
         }
         QuizResponseDto response = new QuizResponseDto();
 

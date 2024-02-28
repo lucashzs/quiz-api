@@ -1,12 +1,22 @@
 package com.api.quiz.dtos;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class QuizAnswerDto {
 
     private String userName;
     private Map<Long, String> answers;
     private Long quizId;
+    private String accessPassword;
+
+    public String getAccessPassword() {
+        return accessPassword;
+    }
+
+    public void setAccessPassword(String accessPassword) {
+        this.accessPassword = accessPassword;
+    }
 
     public String getUserName() {
         return userName;
