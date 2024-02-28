@@ -1,7 +1,6 @@
 package com.api.quiz.dtos;
 
 import java.util.Map;
-import java.util.Optional;
 
 public class QuizAnswerDto {
 
