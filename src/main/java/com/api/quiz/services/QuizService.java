@@ -1,13 +1,11 @@
 package com.api.quiz.services;
 
-import com.api.quiz.dtos.QuestionDto;
-import com.api.quiz.dtos.QuizAnswerDto;
-import com.api.quiz.dtos.QuizDto;
-import com.api.quiz.dtos.QuizResponseDto;
+import com.api.quiz.dtos.*;
 import com.api.quiz.entities.Question;
 import com.api.quiz.entities.Quiz;
 import com.api.quiz.errors.exceptions.BadRequestException;
 import com.api.quiz.errors.exceptions.NotFoundException;
+import com.api.quiz.repositories.QuestionsRepository;
 import com.api.quiz.repositories.QuizRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
@@ -23,10 +21,12 @@ public class QuizService {
 
     private final QuizRepository quizRepository;
     private final AuthenticationService authenticationService;
+    private final QuestionsRepository questionsRepository;
 
-    public QuizService(QuizRepository quizRepository, AuthenticationService authenticationService) {
+    public QuizService(QuizRepository quizRepository, AuthenticationService authenticationService, QuestionsRepository questionsRepository) {
         this.quizRepository = quizRepository;
         this.authenticationService = authenticationService;
+        this.questionsRepository = questionsRepository;
     }
 
     public Quiz findById(Long quiz) {
@@ -34,12 +34,12 @@ public class QuizService {
                 .orElseThrow(() -> new NotFoundException("Quiz Not Found"));
     }
 
-    public ResponseEntity<QuizDto> getQuizById(Long id) {
-        QuizDto quizDto =
-                quizRepository.findById(id)
-                        .map(QuizDto::new).orElseThrow(() -> new NotFoundException("Quiz Not Found"));
-        return ResponseEntity.ok(quizDto);
+    public ResponseEntity<QuizResponseDto> getQuiz(Long id) {
+        var quiz = quizRepository.findById(id)
+                .map(QuizDto::new).orElseThrow(() -> new NotFoundException("Quiz Not Found"));
+        QuizResponseDto quizResponseDto = new QuizResponseDto(quiz.nameQuiz(), quiz.visibility(), quiz.accessPassword(), getQuestions(id));
 
+        return ResponseEntity.ok(quizResponseDto);
     }
 
     @Transactional
@@ -51,6 +51,14 @@ public class QuizService {
         return ResponseEntity.ok(quizzes);
     }
 
+    public List<QuestionDto> getQuestions(Long id) {
+        var currentUser = authenticationService.getCurrentUser();
+        var quizQuestions = questionsRepository.findByQuizIdAndQuizUser(id, currentUser);
+
+        return quizQuestions.stream()
+                .map(question -> new QuestionDto(question, id))
+                .collect(Collectors.toList());
+    }
 
     public ResponseEntity<Object> createQuiz(QuizDto quizDto) {
         var currentUser = authenticationService.getCurrentUser();
@@ -70,8 +78,7 @@ public class QuizService {
         return ResponseEntity.status(HttpStatus.CREATED).body("Created Quiz Successfully!");
     }
 
-
-    public ResponseEntity<QuizResponseDto> checkQuizAnswers(QuizAnswerDto answer) {
+    public ResponseEntity<QuizIncorrectResponseDto> checkQuizAnswers(QuizAnswerDto answer) {
         Quiz quiz = quizRepository.findById(answer.getQuizId())
                 .orElseThrow(() -> new BadRequestException("Quiz not found!"));
 
@@ -92,7 +99,7 @@ public class QuizService {
                 incorrectQuestions.add(questionDto);
             }
         }
-        QuizResponseDto response = new QuizResponseDto();
+        QuizIncorrectResponseDto response = new QuizIncorrectResponseDto();
 
         if (incorrectQuestions.isEmpty()) {
             response.setMessage("Correct answers!");

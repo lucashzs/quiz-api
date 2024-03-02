@@ -12,6 +12,6 @@ public record QuestionDto(
 
 ) {
     public QuestionDto(Question question, Long id) {
-        this(question.getQuestionText(), question.getCorrectAnswer(), question.getQuestionType());
+        this( question.getQuestionText(), question.getCorrectAnswer(), question.getQuestionType());
     }
 }

@@ -2,6 +2,7 @@ package com.api.quiz.controllers;
 
 import com.api.quiz.dtos.QuizAnswerDto;
 import com.api.quiz.dtos.QuizDto;
+import com.api.quiz.dtos.QuizIncorrectResponseDto;
 import com.api.quiz.dtos.QuizResponseDto;
 import com.api.quiz.services.QuizService;
 import jakarta.validation.Valid;
@@ -31,12 +32,12 @@ public class QuizController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<QuizDto> getQuizById(@PathVariable Long id) {
-        return this.quizService.getQuizById(id);
+    public ResponseEntity<QuizResponseDto> getQuiz(@PathVariable Long id) {
+        return this.quizService.getQuiz(id);
     }
 
     @PostMapping("/answers")
-    public ResponseEntity<QuizResponseDto> answerQuiz(@RequestBody QuizAnswerDto answers) {
+    public ResponseEntity<QuizIncorrectResponseDto> answerQuiz(@RequestBody QuizAnswerDto answers) {
         return this.quizService.checkQuizAnswers(answers);
     }
 }
