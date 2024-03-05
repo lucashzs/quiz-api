@@ -1,6 +1,7 @@
 package com.api.quiz.entities;
 
 import com.api.quiz.dtos.QuestionDto;
+import com.api.quiz.dtos.QuestionInputDto;
 import com.api.quiz.enums.QuestionType;
 import jakarta.persistence.*;
 
@@ -23,10 +24,15 @@ public class Question {
     private String correctAnswer;
 
     public Question(QuestionDto questionDto, Quiz quiz) {
-        this.questionText = questionDto.questionText();
-        this.correctAnswer = questionDto.correctAnswer();
-        this.questionType = questionDto.questionType();
+        this.questionText = questionDto.getQuestionText();
+        this.correctAnswer = questionDto.getCorrectAnswer();
+//        this.questionType = questionDto.getQuestionType();
         this.quiz = quiz;
+    }
+
+    public Question(QuestionInputDto questionInputDto) {
+        this.questionText = questionInputDto.getQuestionText();
+        this.correctAnswer = questionInputDto.getCorrectAnswer();
     }
 
     public Question() {

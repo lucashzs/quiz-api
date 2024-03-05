@@ -5,13 +5,46 @@ import com.api.quiz.enums.QuestionType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record QuestionDto(
-        @NotBlank(message = "The question cannot be empty") String questionText,
-        @NotBlank(message = "The Correct Answer cannot be empty") String correctAnswer,
-        @NotNull(message = "The ques question type cannot be empty") QuestionType questionType
+public class QuestionDto{
+    @NotBlank(message = "The question cannot be empty")
+    private String questionText;
 
-) {
+    @NotBlank(message = "The Correct Answer cannot be empty")
+    private String correctAnswer;
+
+//    @NotNull(message = "The ques question type cannot be empty")
+//    private QuestionType questionType;
+
+    public QuestionDto() {
+    }
+
+    public String getQuestionText() {
+        return questionText;
+    }
+
+    public void setQuestionText(String questionText) {
+        this.questionText = questionText;
+    }
+
+    public String getCorrectAnswer() {
+        return correctAnswer;
+    }
+
+    public void setCorrectAnswer(String correctAnswer) {
+        this.correctAnswer = correctAnswer;
+    }
+
+//    public QuestionType getQuestionType() {
+//        return questionType;
+//    }
+//
+//    public void setQuestionType(QuestionType questionType) {
+//        this.questionType = questionType;
+//    }
+
     public QuestionDto(Question question, Long id) {
-        this( question.getQuestionText(), question.getCorrectAnswer(), question.getQuestionType());
+        this.questionText = question.getQuestionText();
+        this.correctAnswer = question.getCorrectAnswer();
+//        this.questionType = question.getQuestionType();
     }
 }

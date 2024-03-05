@@ -1,5 +1,6 @@
 package com.api.quiz.controllers;
 
+import com.api.quiz.dtos.AlternativeQuestionDto;
 import com.api.quiz.dtos.QuestionDto;
 import com.api.quiz.services.QuestionsService;
 import jakarta.validation.Valid;
@@ -27,7 +28,7 @@ public class QuestionsController {
     }
 
     @PostMapping("/alternative")
-    public ResponseEntity<Object> createAlternativeQuestion(@RequestBody @Valid QuestionDto questionDto, @PathVariable Long quizId) {
-        return this.questionsService.createAlternativeQuestion(questionDto, quizId);
+    public ResponseEntity<Object> createAlternativeQuestion(@RequestBody @Valid AlternativeQuestionDto alternativeQuestionDto, @PathVariable Long quizId) {
+        return this.questionsService.createAlternativeQuestion(alternativeQuestionDto, quizId);
     }
 }
