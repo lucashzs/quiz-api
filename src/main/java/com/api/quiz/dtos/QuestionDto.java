@@ -12,9 +12,6 @@ public class QuestionDto{
     @NotBlank(message = "The Correct Answer cannot be empty")
     private String correctAnswer;
 
-//    @NotNull(message = "The ques question type cannot be empty")
-//    private QuestionType questionType;
-
     public QuestionDto() {
     }
 
@@ -34,17 +31,8 @@ public class QuestionDto{
         this.correctAnswer = correctAnswer;
     }
 
-//    public QuestionType getQuestionType() {
-//        return questionType;
-//    }
-//
-//    public void setQuestionType(QuestionType questionType) {
-//        this.questionType = questionType;
-//    }
-
     public QuestionDto(Question question, Long id) {
         this.questionText = question.getQuestionText();
         this.correctAnswer = question.getCorrectAnswer();
-//        this.questionType = question.getQuestionType();
     }
 }

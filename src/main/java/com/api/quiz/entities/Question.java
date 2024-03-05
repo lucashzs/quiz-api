@@ -16,8 +16,8 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private QuestionType questionType;
+//    @Enumerated(EnumType.STRING)
+//    private QuestionType questionType;
 
     private String questionText;
 
@@ -26,7 +26,6 @@ public class Question {
     public Question(QuestionDto questionDto, Quiz quiz) {
         this.questionText = questionDto.getQuestionText();
         this.correctAnswer = questionDto.getCorrectAnswer();
-//        this.questionType = questionDto.getQuestionType();
         this.quiz = quiz;
     }
 
