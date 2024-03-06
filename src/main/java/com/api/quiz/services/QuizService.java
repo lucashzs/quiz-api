@@ -51,12 +51,12 @@ public class QuizService {
         return ResponseEntity.ok(quizzes);
     }
 
-    public List<QuestionDto> getQuestions(Long id) {
+    public List<QuestionOutputDto> getQuestions(Long id) {
         var currentUser = authenticationService.getCurrentUser();
         var quizQuestions = questionsRepository.findByQuizIdAndQuizUser(id, currentUser);
 
         return quizQuestions.stream()
-                .map(question -> new QuestionDto(question, id))
+                .map(question -> new QuestionOutputDto(question, id))
                 .collect(Collectors.toList());
     }
 
@@ -91,12 +91,12 @@ public class QuizService {
             }
         }
 
-        List<QuestionDto> incorrectQuestions = new ArrayList<>();
+        List<QuestionOutputDto> incorrectQuestions = new ArrayList<>();
 
         for (Question question : quiz.getQuestions()) {
             if (!question.getCorrectAnswer().equalsIgnoreCase(answer.getAnswers().get(question.getId()))) {
-                QuestionDto questionDto = new QuestionDto(question, question.getId());
-                incorrectQuestions.add(questionDto);
+                QuestionOutputDto questionOutputDto = new QuestionOutputDto(question, question.getId());
+                incorrectQuestions.add(questionOutputDto);
             }
         }
         QuizIncorrectResponseDto response = new QuizIncorrectResponseDto();

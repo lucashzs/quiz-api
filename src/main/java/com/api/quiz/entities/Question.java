@@ -1,8 +1,7 @@
 package com.api.quiz.entities;
 
-import com.api.quiz.dtos.QuestionDto;
+import com.api.quiz.dtos.QuestionOutputDto;
 import com.api.quiz.dtos.QuestionInputDto;
-import com.api.quiz.enums.QuestionType;
 import jakarta.persistence.*;
 
 @Entity
@@ -16,16 +15,13 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @Enumerated(EnumType.STRING)
-//    private QuestionType questionType;
-
     private String questionText;
 
     private String correctAnswer;
 
-    public Question(QuestionDto questionDto, Quiz quiz) {
-        this.questionText = questionDto.getQuestionText();
-        this.correctAnswer = questionDto.getCorrectAnswer();
+    public Question(QuestionOutputDto questionOutputDto, Quiz quiz) {
+        this.questionText = questionOutputDto.getQuestionText();
+        this.correctAnswer = questionOutputDto.getCorrectAnswer();
         this.quiz = quiz;
     }
 
@@ -36,15 +32,6 @@ public class Question {
 
     public Question() {
 
-    }
-
-    public QuestionType getQuestionType() {
-        return questionType;
-    }
-
-    public QuestionType setQuestionType(QuestionType questionType) {
-        this.questionType = questionType;
-        return questionType;
     }
 
     public Long getId() {

@@ -1,18 +1,16 @@
 package com.api.quiz.dtos;
 
 import com.api.quiz.entities.Question;
-import com.api.quiz.enums.QuestionType;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
-public class QuestionDto{
+public class QuestionOutputDto {
     @NotBlank(message = "The question cannot be empty")
     private String questionText;
 
     @NotBlank(message = "The Correct Answer cannot be empty")
     private String correctAnswer;
 
-    public QuestionDto() {
+    public QuestionOutputDto() {
     }
 
     public String getQuestionText() {
@@ -31,7 +29,7 @@ public class QuestionDto{
         this.correctAnswer = correctAnswer;
     }
 
-    public QuestionDto(Question question, Long id) {
+    public QuestionOutputDto(Question question, Long id) {
         this.questionText = question.getQuestionText();
         this.correctAnswer = question.getCorrectAnswer();
     }

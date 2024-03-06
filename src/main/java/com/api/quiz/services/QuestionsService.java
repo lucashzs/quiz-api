@@ -1,11 +1,10 @@
 package com.api.quiz.services;
 
 import com.api.quiz.dtos.AlternativeQuestionDto;
-import com.api.quiz.dtos.QuestionDto;
+import com.api.quiz.dtos.QuestionOutputDto;
 import com.api.quiz.entities.AlternativeQuestion;
 import com.api.quiz.entities.Question;
 import com.api.quiz.entities.Quiz;
-import com.api.quiz.enums.QuestionType;
 import com.api.quiz.repositories.QuestionsRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,21 +25,19 @@ public class QuestionsService {
         this.quizService = quizService;
     }
 
-    public ResponseEntity<Object> createDirectQuestions(QuestionDto questionDto, Long quizId) {
+    public ResponseEntity<Object> createDirectQuestions(QuestionOutputDto questionOutputDto, Long quizId) {
         Quiz quiz = quizService.findById(quizId);
-        var newQuestion = new Question(questionDto, quiz);
+        var newQuestion = new Question(questionOutputDto, quiz);
 
-        newQuestion.setQuestionType(QuestionType.DIRECT_QUESTION);
 
         this.questionsRepository.save(newQuestion);
         return ResponseEntity.status(HttpStatus.CREATED).body("Created Question Successfully!");
     }
 
-    public ResponseEntity<Object> createTrueOrFalseQuestion(QuestionDto questionDto, Long quizId) {
+    public ResponseEntity<Object> createTrueOrFalseQuestion(QuestionOutputDto questionOutputDto, Long quizId) {
         Quiz quiz = quizService.findById(quizId);
-        var newQuestion = new Question(questionDto, quiz);
+        var newQuestion = new Question(questionOutputDto, quiz);
 
-        newQuestion.setQuestionType(QuestionType.TRUE_OR_FALSE_QUESTION);
 
         this.questionsRepository.save(newQuestion);
         return ResponseEntity.status(HttpStatus.CREATED).body("Created Question Successfully!");
@@ -49,8 +46,6 @@ public class QuestionsService {
     public ResponseEntity<Object> createAlternativeQuestion(AlternativeQuestionDto alternativeQuestionDto, Long quizId) {
         Quiz quiz = quizService.findById(quizId);
         var newQuestion = new AlternativeQuestion(alternativeQuestionDto, quiz);
-
-        newQuestion.setQuestionType(QuestionType.ALTERNATIVE_QUESTION);
 
         List<String> options = alternativeQuestionDto.getOptions();
         newQuestion.setOptions(options);

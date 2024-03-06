@@ -1,7 +1,7 @@
 package com.api.quiz.controllers;
 
 import com.api.quiz.dtos.AlternativeQuestionDto;
-import com.api.quiz.dtos.QuestionDto;
+import com.api.quiz.dtos.QuestionOutputDto;
 import com.api.quiz.services.QuestionsService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +18,13 @@ public class QuestionsController {
     }
 
     @PostMapping("/direct")
-    public ResponseEntity<Object> createQuestionsDirect(@RequestBody @Valid QuestionDto questionDto, @PathVariable Long quizId) {
-        return this.questionsService.createDirectQuestions(questionDto, quizId);
+    public ResponseEntity<Object> createQuestionsDirect(@RequestBody @Valid QuestionOutputDto questionOutputDto, @PathVariable Long quizId) {
+        return this.questionsService.createDirectQuestions(questionOutputDto, quizId);
     }
 
     @PostMapping("/true-or-false")
-    public ResponseEntity<Object> createTrueOrFalseQuestion(@RequestBody @Valid QuestionDto questionDto, @PathVariable Long quizId) {
-        return this.questionsService.createTrueOrFalseQuestion(questionDto, quizId);
+    public ResponseEntity<Object> createTrueOrFalseQuestion(@RequestBody @Valid QuestionOutputDto questionOutputDto, @PathVariable Long quizId) {
+        return this.questionsService.createTrueOrFalseQuestion(questionOutputDto, quizId);
     }
 
     @PostMapping("/alternative")
