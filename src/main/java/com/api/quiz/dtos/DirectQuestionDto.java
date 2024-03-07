@@ -1,16 +1,24 @@
 package com.api.quiz.dtos;
 
-import com.api.quiz.entities.Question;
+import com.api.quiz.entities.Quiz;
 import jakarta.validation.constraints.NotBlank;
 
-public class QuestionOutputDto {
+public class DirectQuestionDto{
     @NotBlank(message = "The question cannot be empty")
     private String questionText;
 
     @NotBlank(message = "The Correct Answer cannot be empty")
     private String correctAnswer;
 
-    public QuestionOutputDto() {
+    public DirectQuestionDto() {
+    }
+
+    public DirectQuestionDto(String questionText, String correctAnswer) {
+        this.questionText = questionText;
+        this.correctAnswer = correctAnswer;
+    }
+
+    public DirectQuestionDto(DirectQuestionDto directQuestionDto, Quiz quiz) {
     }
 
     public String getQuestionText() {
@@ -27,10 +35,5 @@ public class QuestionOutputDto {
 
     public void setCorrectAnswer(String correctAnswer) {
         this.correctAnswer = correctAnswer;
-    }
-
-    public QuestionOutputDto(Question question, Long id) {
-        this.questionText = question.getQuestionText();
-        this.correctAnswer = question.getCorrectAnswer();
     }
 }

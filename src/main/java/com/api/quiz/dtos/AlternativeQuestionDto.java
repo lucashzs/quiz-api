@@ -2,7 +2,7 @@ package com.api.quiz.dtos;
 
 import java.util.List;
 
-public class AlternativeQuestionDto extends QuestionInputDto{
+public class AlternativeQuestionDto extends DirectQuestionDto {
 
     private List<String> options;
 
@@ -13,7 +13,7 @@ public class AlternativeQuestionDto extends QuestionInputDto{
     public void setOptions(List<String> options) {
         this.options = options;
     }
-    public AlternativeQuestionDto( Long id, List<String> options) {
+    public AlternativeQuestionDto(Long id, List<String> options) {
         this.options = options;
     }
 }

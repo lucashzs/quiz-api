@@ -1,6 +1,6 @@
 package com.api.quiz.entities;
 
-import com.api.quiz.dtos.QuestionOutputDto;
+import com.api.quiz.dtos.QuestionDto;
 import com.api.quiz.dtos.QuizDto;
 import jakarta.persistence.*;
 
@@ -36,7 +36,7 @@ public class Quiz {
     public Quiz() {
     }
 
-    public Quiz(QuestionOutputDto questionOutputDto) {
+    public Quiz(QuestionDto questionDto) {
     }
 
     public Long getId() {

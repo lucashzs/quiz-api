@@ -1,7 +1,8 @@
 package com.api.quiz.services;
 
 import com.api.quiz.dtos.AlternativeQuestionDto;
-import com.api.quiz.dtos.QuestionOutputDto;
+import com.api.quiz.dtos.DirectQuestionDto;
+import com.api.quiz.dtos.TrueOrFalseQuestionDto;
 import com.api.quiz.entities.AlternativeQuestion;
 import com.api.quiz.entities.Question;
 import com.api.quiz.entities.Quiz;
@@ -25,18 +26,18 @@ public class QuestionsService {
         this.quizService = quizService;
     }
 
-    public ResponseEntity<Object> createDirectQuestions(QuestionOutputDto questionOutputDto, Long quizId) {
+    public ResponseEntity<Object> createDirectQuestions(DirectQuestionDto directQuestionDto, Long quizId) {
         Quiz quiz = quizService.findById(quizId);
-        var newQuestion = new Question(questionOutputDto, quiz);
+        var newQuestion = new Question(directQuestionDto, quiz);
 
 
         this.questionsRepository.save(newQuestion);
         return ResponseEntity.status(HttpStatus.CREATED).body("Created Question Successfully!");
     }
 
-    public ResponseEntity<Object> createTrueOrFalseQuestion(QuestionOutputDto questionOutputDto, Long quizId) {
+    public ResponseEntity<Object> createTrueOrFalseQuestion(TrueOrFalseQuestionDto trueOrFalseQuestionDto, Long quizId) {
         Quiz quiz = quizService.findById(quizId);
-        var newQuestion = new Question(questionOutputDto, quiz);
+        var newQuestion = new Question(trueOrFalseQuestionDto, quiz);
 
 
         this.questionsRepository.save(newQuestion);

@@ -1,7 +1,8 @@
 package com.api.quiz.entities;
 
-import com.api.quiz.dtos.QuestionOutputDto;
-import com.api.quiz.dtos.QuestionInputDto;
+import com.api.quiz.dtos.QuestionDto;
+import com.api.quiz.dtos.DirectQuestionDto;
+import com.api.quiz.dtos.TrueOrFalseQuestionDto;
 import jakarta.persistence.*;
 
 @Entity
@@ -19,19 +20,25 @@ public class Question {
 
     private String correctAnswer;
 
-    public Question(QuestionOutputDto questionOutputDto, Quiz quiz) {
-        this.questionText = questionOutputDto.getQuestionText();
-        this.correctAnswer = questionOutputDto.getCorrectAnswer();
+    public Question(QuestionDto questionDto, Quiz quiz) {
+        this.questionText = questionDto.getQuestionText();
+        this.correctAnswer = questionDto.getCorrectAnswer();
         this.quiz = quiz;
     }
 
-    public Question(QuestionInputDto questionInputDto) {
-        this.questionText = questionInputDto.getQuestionText();
-        this.correctAnswer = questionInputDto.getCorrectAnswer();
+    public Question(DirectQuestionDto directQuestionDto) {
+        this.questionText = directQuestionDto.getQuestionText();
+        this.correctAnswer = directQuestionDto.getCorrectAnswer();
     }
 
     public Question() {
 
+    }
+
+    public Question(TrueOrFalseQuestionDto trueOrFalseQuestionDto, Quiz quiz) {
+    }
+
+    public Question(DirectQuestionDto directQuestionDto, Quiz quiz) {
     }
 
     public Long getId() {
