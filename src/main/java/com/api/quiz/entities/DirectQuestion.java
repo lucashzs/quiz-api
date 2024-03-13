@@ -1,13 +1,11 @@
 package com.api.quiz.entities;
 
-import com.api.quiz.dtos.AlternativeQuestionCreateDto;
+import com.api.quiz.dtos.DirectQuestionCreateDto;
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Entity
-@DiscriminatorValue("ALTERNATIVE_QUESTION")
-public class AlternativeQuestion{
+public class DirectQuestion{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,21 +14,17 @@ public class AlternativeQuestion{
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;
 
-
     private String questionText;
 
     private String correctAnswer;
 
-    @ElementCollection
-    private List<String> alternatives;
-
-    public AlternativeQuestion(AlternativeQuestionCreateDto alternativeQuestionCreateDto, Quiz quiz) {
-        this.alternatives = alternativeQuestionCreateDto.getAlternatives();
-        this.correctAnswer = alternativeQuestionCreateDto.getCorrectAnswer();
-        this.questionText = alternativeQuestionCreateDto.getQuestionText();
+    public DirectQuestion(DirectQuestionCreateDto directQuestionCreateDto, Quiz quiz) {
+        this.questionText = directQuestionCreateDto.getQuestionText();
+        this.correctAnswer = directQuestionCreateDto.getCorrectAnswer();
         this.setQuiz(quiz);
     }
-    public AlternativeQuestion() {
+
+    public DirectQuestion() {
     }
 
     public String getQuestionText() {
@@ -49,14 +43,6 @@ public class AlternativeQuestion{
         this.correctAnswer = correctAnswer;
     }
 
-    public List<String> getAlternatives() {
-        return alternatives;
-    }
-
-    public void setAlternatives(List<String> options) {
-        this.alternatives = options;
-    }
-
     public Long getId() {
         return id;
     }
@@ -73,4 +59,3 @@ public class AlternativeQuestion{
         this.quiz = quiz;
     }
 }
-

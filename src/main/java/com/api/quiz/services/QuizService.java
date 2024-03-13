@@ -1,12 +1,10 @@
 package com.api.quiz.services;
 
 import com.api.quiz.dtos.*;
-import com.api.quiz.entities.Question;
 import com.api.quiz.entities.Quiz;
 import com.api.quiz.errors.exceptions.BadRequestException;
 import com.api.quiz.errors.exceptions.NotFoundException;
-import com.api.quiz.repositories.QuestionsRepository;
-import com.api.quiz.repositories.QuizRepository;
+import com.api.quiz.repositories.*;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,23 +19,28 @@ public class QuizService {
 
     private final QuizRepository quizRepository;
     private final AuthenticationService authenticationService;
-    private final QuestionsRepository questionsRepository;
+    private final DirectQuestionRepository directQuestionRepository;
+    private final AlternativeQuestionRepository alternativeQuestionRepository;
+    private final TrueOrFalseQuestionRepository trueOrFalseQuestionRepository;
 
-    public QuizService(QuizRepository quizRepository, AuthenticationService authenticationService, QuestionsRepository questionsRepository) {
+
+    public QuizService(QuizRepository quizRepository, AuthenticationService authenticationService, DirectQuestionRepository directQuestionRepository, AlternativeQuestionRepository alternativeQuestionRepository, TrueOrFalseQuestionRepository trueOrFalseQuestionRepository) {
         this.quizRepository = quizRepository;
         this.authenticationService = authenticationService;
-        this.questionsRepository = questionsRepository;
+        this.directQuestionRepository = directQuestionRepository;
+        this.alternativeQuestionRepository = alternativeQuestionRepository;
+        this.trueOrFalseQuestionRepository = trueOrFalseQuestionRepository;
     }
 
     public Quiz findById(Long quiz) {
         return this.quizRepository.findById(quiz)
-                .orElseThrow(() -> new NotFoundException("Quiz Not Found"));
+                .orElseThrow(() -> new NotFoundException("Quiz Not Found!"));
     }
 
     public ResponseEntity<QuizResponseDto> getQuiz(Long id) {
         var quiz = quizRepository.findById(id)
                 .map(QuizDto::new).orElseThrow(() -> new NotFoundException("Quiz Not Found"));
-        QuizResponseDto quizResponseDto = new QuizResponseDto(quiz.nameQuiz(), quiz.visibility(), quiz.accessPassword(), getQuestions(id));
+        QuizResponseDto quizResponseDto = new QuizResponseDto(quiz.nameQuiz(), quiz.visibility(), quiz.accessPassword(),  getQuestions(id));
 
         return ResponseEntity.ok(quizResponseDto);
     }
@@ -51,13 +54,19 @@ public class QuizService {
         return ResponseEntity.ok(quizzes);
     }
 
-    public List<QuestionDto> getQuestions(Long id) {
+    public List<Object> getQuestions(Long id) {
         var currentUser = authenticationService.getCurrentUser();
-        var quizQuestions = questionsRepository.findByQuizIdAndQuizUser(id, currentUser);
 
-        return quizQuestions.stream()
-                .map(question -> new QuestionDto(question, id))
-                .collect(Collectors.toList());
+        var directQuestions = directQuestionRepository.findByQuizIdAndQuizUser(id, currentUser).stream().map(DirectQuestionListDto::new).toList();
+        var alternativeQuestions = alternativeQuestionRepository.findByQuizIdAndQuizUser(id, currentUser).stream().map(AlternativeQuestionListDto::new).toList();
+        var trueOrFalseQuestions = trueOrFalseQuestionRepository.findByQuizIdAndQuizUser(id, currentUser).stream().map(TrueOrFalseQuestionListDto::new).toList();
+
+        var questionsList = new ArrayList<>();
+        questionsList.addAll(directQuestions);
+        questionsList.addAll(alternativeQuestions);
+        questionsList.addAll(trueOrFalseQuestions);
+
+        return questionsList;
     }
 
     public ResponseEntity<Object> createQuiz(QuizDto quizDto) {
@@ -91,14 +100,49 @@ public class QuizService {
             }
         }
 
-        List<QuestionDto> incorrectQuestions = new ArrayList<>();
+        List<Object> incorrectQuestions = new ArrayList<>();
 
-        for (Question question : quiz.getQuestions()) {
-            if (!question.getCorrectAnswer().equalsIgnoreCase(answer.getAnswers().get(question.getId()))) {
-                QuestionDto questionDto = new QuestionDto(question, question.getId());
-                incorrectQuestions.add(questionDto);
+        // Direct Question Logic
+        var directQuestions = quiz.getDirectQuestionList()
+                .stream()
+                .map(DirectQuestionListDto::new)
+                .toList();
+
+        for (DirectQuestionListDto directQuestionListDto : directQuestions) {
+            String answerKey = "Direct-" + directQuestionListDto.id();
+            if (!directQuestionListDto.correctAnswer().equalsIgnoreCase(answer.getAnswers().get(answerKey))) {
+                incorrectQuestions.add(directQuestionListDto);
             }
         }
+
+        // Alternative Question Logic
+        var alternativeQuestions = quiz.getAlternativeQuestionsList()
+                .stream()
+                .map(AlternativeQuestionListDto::new)
+                .toList();
+
+        for (AlternativeQuestionListDto alternativeQuestionListDto : alternativeQuestions) {
+            String answerKey = "Alternative-" + alternativeQuestionListDto.id();
+            if (!alternativeQuestionListDto.correctAnswer().equalsIgnoreCase(answer.getAnswers().get(answerKey))) {
+                incorrectQuestions.add(alternativeQuestionListDto);
+            }
+        }
+
+        // True Or False Question Logic
+        var trueOrFalseQuestions = quiz.getTrueOrFalseQuestionList()
+                .stream()
+                .map(TrueOrFalseQuestionListDto::new)
+                .toList();
+
+        for (TrueOrFalseQuestionListDto trueOrFalseQuestionListDto : trueOrFalseQuestions) {
+            String answerKey = "TrueOrFalse-" + trueOrFalseQuestionListDto.id();
+            boolean userAnswer = Boolean.parseBoolean(answer.getAnswers().get(answerKey));
+
+            if (trueOrFalseQuestionListDto.correctAnswer() != userAnswer) {
+                incorrectQuestions.add(trueOrFalseQuestionListDto);
+            }
+        }
+
         QuizIncorrectResponseDto response = new QuizIncorrectResponseDto();
 
         if (incorrectQuestions.isEmpty()) {

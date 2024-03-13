@@ -5,7 +5,7 @@ import java.util.Map;
 public class QuizAnswerDto {
 
     private String userName;
-    private Map<Long, String> answers;
+    private Map<String, String> answers;
     private Long quizId;
     private String accessPassword;
 
@@ -25,11 +25,11 @@ public class QuizAnswerDto {
         this.userName = userName;
     }
 
-    public Map<Long, String> getAnswers() {
+    public Map<String, String> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(Map<Long, String> answers) {
+    public void setAnswers(Map<String, String> answers) {
         this.answers = answers;
     }
 

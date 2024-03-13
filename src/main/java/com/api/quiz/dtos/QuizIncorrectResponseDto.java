@@ -7,12 +7,12 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class QuizIncorrectResponseDto {
     private String message;
-    private List<QuestionDto> incorrectQuestion;
+    private List<Object> incorrectQuestion;
 
     public QuizIncorrectResponseDto() {
     }
 
-    public QuizIncorrectResponseDto(String message, List<QuestionDto> incorrectQuestionIds) {
+    public QuizIncorrectResponseDto(String message, List<Object> incorrectQuestionIds) {
         this.message = message;
         this.incorrectQuestion = incorrectQuestionIds;
     }
@@ -25,11 +25,11 @@ public class QuizIncorrectResponseDto {
         this.message = message;
     }
 
-    public List<QuestionDto> getIncorrectQuestion() {
+    public List<Object> getIncorrectQuestion() {
         return incorrectQuestion;
     }
 
-    public void setIncorrectQuestion(List<QuestionDto> incorrectQuestion) {
+    public void setIncorrectQuestion(List<Object> incorrectQuestion) {
         this.incorrectQuestion = incorrectQuestion;
     }
 }

@@ -1,12 +1,12 @@
 package com.api.quiz.services;
 
-import com.api.quiz.dtos.AlternativeQuestionDto;
-import com.api.quiz.dtos.DirectQuestionDto;
-import com.api.quiz.dtos.TrueOrFalseQuestionDto;
-import com.api.quiz.entities.AlternativeQuestion;
-import com.api.quiz.entities.Question;
-import com.api.quiz.entities.Quiz;
-import com.api.quiz.repositories.QuestionsRepository;
+import com.api.quiz.dtos.AlternativeQuestionCreateDto;
+import com.api.quiz.dtos.DirectQuestionCreateDto;
+import com.api.quiz.dtos.TrueOrFalseQuestionCreateDto;
+import com.api.quiz.entities.*;
+import com.api.quiz.repositories.AlternativeQuestionRepository;
+import com.api.quiz.repositories.DirectQuestionRepository;
+import com.api.quiz.repositories.TrueOrFalseQuestionRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,54 +18,58 @@ import java.util.Objects;
 @Service
 public class QuestionsService {
 
-    private final QuestionsRepository questionsRepository;
+    private final AlternativeQuestionRepository alternativeQuestionRepository;
+    private final DirectQuestionRepository directQuestionRepository;
+    private final TrueOrFalseQuestionRepository trueOrFalseQuestionRepository;
     private final QuizService quizService;
 
-    public QuestionsService(QuestionsRepository questionsRepository, QuizService quizService) {
-        this.questionsRepository = questionsRepository;
+    public QuestionsService(AlternativeQuestionRepository alternativeQuestionRepository, DirectQuestionRepository directQuestionRepository, TrueOrFalseQuestionRepository trueOrFalseQuestionRepository, QuizService quizService) {
+        this.alternativeQuestionRepository = alternativeQuestionRepository;
+        this.directQuestionRepository = directQuestionRepository;
+        this.trueOrFalseQuestionRepository = trueOrFalseQuestionRepository;
         this.quizService = quizService;
     }
 
-    public ResponseEntity<Object> createDirectQuestions(DirectQuestionDto directQuestionDto, Long quizId) {
+    public ResponseEntity<Object> createDirectQuestions(DirectQuestionCreateDto directQuestionCreateDto, Long quizId) {
         Quiz quiz = quizService.findById(quizId);
-        var newQuestion = new Question(directQuestionDto, quiz);
+        var newQuestion = new DirectQuestion(directQuestionCreateDto, quiz);
 
 
-        this.questionsRepository.save(newQuestion);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Created Question Successfully!");
+        this.directQuestionRepository.save(newQuestion);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Created Direct Question Successfully!");
     }
 
-    public ResponseEntity<Object> createTrueOrFalseQuestion(TrueOrFalseQuestionDto trueOrFalseQuestionDto, Long quizId) {
+    public ResponseEntity<Object> createTrueOrFalseQuestion(TrueOrFalseQuestionCreateDto trueOrFalseQuestionCreateDto, Long quizId) {
         Quiz quiz = quizService.findById(quizId);
-        var newQuestion = new Question(trueOrFalseQuestionDto, quiz);
+        var newQuestion = new TrueOrFalseQuestion(trueOrFalseQuestionCreateDto, quiz);
 
 
-        this.questionsRepository.save(newQuestion);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Created Question Successfully!");
+        this.trueOrFalseQuestionRepository.save(newQuestion);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Created True Or False Question Successfully!");
     }
 
-    public ResponseEntity<Object> createAlternativeQuestion(AlternativeQuestionDto alternativeQuestionDto, Long quizId) {
+    public ResponseEntity<Object> createAlternativeQuestion(AlternativeQuestionCreateDto alternativeQuestionCreateDto, Long quizId) {
         Quiz quiz = quizService.findById(quizId);
-        var newQuestion = new AlternativeQuestion(alternativeQuestionDto, quiz);
+        var newQuestion = new AlternativeQuestion(alternativeQuestionCreateDto, quiz);
 
-        List<String> options = alternativeQuestionDto.getOptions();
-        newQuestion.setOptions(options);
+        List<String> alternatives = alternativeQuestionCreateDto.getAlternatives();
+        newQuestion.setAlternatives(alternatives);
 
-        if (options != null && !options.isEmpty()) {
-            newQuestion.setOptions(options);
+        if (alternatives != null && !alternatives.isEmpty()) {
+            newQuestion.setAlternatives(alternatives);
         }
-        if (options == null || options.size() < 2) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("At least two options are required for an alternative question!");
+        if (alternatives == null || alternatives.size() < 2) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("At least two alternatives are required for an alternative question!");
         }
-        if (options.stream().noneMatch(Objects::isNull)) {
-            if (options.stream().distinct().count() != options.size()) {
+        if (alternatives.stream().noneMatch(Objects::isNull)) {
+            if (alternatives.stream().distinct().count() != alternatives.size()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Options must be unique!");
             }
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Options cannot be null!");
         }
 
-        this.questionsRepository.save(newQuestion);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Created Question Successfully!");
+        this.alternativeQuestionRepository.save(newQuestion);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Created Alternative Question Successfully!");
     }
 }

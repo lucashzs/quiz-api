@@ -3,22 +3,22 @@ package com.api.quiz.dtos;
 import com.api.quiz.entities.Quiz;
 import jakarta.validation.constraints.NotBlank;
 
-public class DirectQuestionDto{
+public class DirectQuestionCreateDto {
     @NotBlank(message = "The question cannot be empty")
     private String questionText;
 
     @NotBlank(message = "The Correct Answer cannot be empty")
     private String correctAnswer;
 
-    public DirectQuestionDto() {
+    public DirectQuestionCreateDto() {
     }
 
-    public DirectQuestionDto(String questionText, String correctAnswer) {
+    public DirectQuestionCreateDto(String questionText, String correctAnswer) {
         this.questionText = questionText;
         this.correctAnswer = correctAnswer;
     }
 
-    public DirectQuestionDto(DirectQuestionDto directQuestionDto, Quiz quiz) {
+    public DirectQuestionCreateDto(DirectQuestionCreateDto directQuestionCreateDto, Quiz quiz) {
     }
 
     public String getQuestionText() {

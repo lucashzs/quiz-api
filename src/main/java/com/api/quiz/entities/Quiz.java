@@ -1,9 +1,9 @@
 package com.api.quiz.entities;
 
-import com.api.quiz.dtos.QuestionDto;
 import com.api.quiz.dtos.QuizDto;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,20 +12,24 @@ public class Quiz {
     @ManyToOne
     private User user;
 
-    @OneToMany(mappedBy = "quiz", fetch = FetchType.LAZY)
-    private List<Question> questions;
+    @OneToMany (mappedBy = "quiz")
+    List<DirectQuestion> directQuestionList = new ArrayList<>();
+
+    @OneToMany (mappedBy = "quiz")
+    List<AlternativeQuestion> alternativeQuestionsList = new ArrayList<>();
+
+    @OneToMany (mappedBy = "quiz")
+    List<TrueOrFalseQuestion> trueOrFalseQuestionList = new ArrayList<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
     private String nameQuiz;
 
     private String visibility;
 
     private String accessPassword;
-
 
     public Quiz(QuizDto quizDto) {
         this.nameQuiz = quizDto.nameQuiz();
@@ -34,9 +38,6 @@ public class Quiz {
     }
 
     public Quiz() {
-    }
-
-    public Quiz(QuestionDto questionDto) {
     }
 
     public Long getId() {
@@ -79,12 +80,27 @@ public class Quiz {
         this.user = user;
     }
 
-    public List<Question> getQuestions() {
-        return questions;
+    public List<DirectQuestion> getDirectQuestionList() {
+        return directQuestionList;
     }
 
-    public void setQuestions(List<Question> questions) {
-        this.questions = questions;
+    public void setDirectQuestionList(List<DirectQuestion> directQuestionList) {
+        this.directQuestionList = directQuestionList;
     }
 
+    public List<AlternativeQuestion> getAlternativeQuestionsList() {
+        return alternativeQuestionsList;
+    }
+
+    public void setAlternativeQuestionsList(List<AlternativeQuestion> alternativeQuestionsList) {
+        this.alternativeQuestionsList = alternativeQuestionsList;
+    }
+
+    public List<TrueOrFalseQuestion> getTrueOrFalseQuestionList() {
+        return trueOrFalseQuestionList;
+    }
+
+    public void setTrueOrFalseQuestionList(List<TrueOrFalseQuestion> trueOrFalseQuestionList) {
+        this.trueOrFalseQuestionList = trueOrFalseQuestionList;
+    }
 }

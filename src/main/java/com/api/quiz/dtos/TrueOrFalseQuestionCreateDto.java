@@ -4,7 +4,7 @@ import com.api.quiz.entities.Quiz;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public class TrueOrFalseQuestionDto{
+public class TrueOrFalseQuestionCreateDto {
 
     @NotBlank(message = "The question cannot be empty")
     private String questionText;
@@ -12,17 +12,17 @@ public class TrueOrFalseQuestionDto{
     @NotNull(message = "The Correct Answer cannot be empty")
     private Boolean correctAnswer;
 
-    public TrueOrFalseQuestionDto() {
+    public TrueOrFalseQuestionCreateDto() {
     }
 
-    public TrueOrFalseQuestionDto(String questionText, Boolean correctAnswer) {
+    public TrueOrFalseQuestionCreateDto(String questionText, Boolean correctAnswer) {
         this.questionText = questionText;
         this.correctAnswer = correctAnswer;
     }
 
-    public TrueOrFalseQuestionDto(TrueOrFalseQuestionDto trueOrFalseQuestionDto, Quiz quiz) {
-        this.questionText = trueOrFalseQuestionDto.getQuestionText();
-        this.correctAnswer = trueOrFalseQuestionDto.getCorrectAnswer();
+    public TrueOrFalseQuestionCreateDto(TrueOrFalseQuestionCreateDto trueOrFalseQuestionCreateDto, Quiz quiz) {
+        this.questionText = trueOrFalseQuestionCreateDto.getQuestionText();
+        this.correctAnswer = trueOrFalseQuestionCreateDto.getCorrectAnswer();
     }
 
     public String getQuestionText() {
