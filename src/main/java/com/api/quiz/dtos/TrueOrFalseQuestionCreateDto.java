@@ -1,6 +1,5 @@
 package com.api.quiz.dtos;
 
-import com.api.quiz.entities.Quiz;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -13,16 +12,6 @@ public class TrueOrFalseQuestionCreateDto {
     private Boolean correctAnswer;
 
     public TrueOrFalseQuestionCreateDto() {
-    }
-
-    public TrueOrFalseQuestionCreateDto(String questionText, Boolean correctAnswer) {
-        this.questionText = questionText;
-        this.correctAnswer = correctAnswer;
-    }
-
-    public TrueOrFalseQuestionCreateDto(TrueOrFalseQuestionCreateDto trueOrFalseQuestionCreateDto, Quiz quiz) {
-        this.questionText = trueOrFalseQuestionCreateDto.getQuestionText();
-        this.correctAnswer = trueOrFalseQuestionCreateDto.getCorrectAnswer();
     }
 
     public String getQuestionText() {
