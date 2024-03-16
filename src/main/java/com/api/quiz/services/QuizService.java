@@ -2,6 +2,7 @@ package com.api.quiz.services;
 
 import com.api.quiz.dtos.*;
 import com.api.quiz.entities.Quiz;
+import com.api.quiz.entities.Rank;
 import com.api.quiz.errors.exceptions.BadRequestException;
 import com.api.quiz.errors.exceptions.NotFoundException;
 import com.api.quiz.repositories.*;
@@ -22,14 +23,16 @@ public class QuizService {
     private final DirectQuestionRepository directQuestionRepository;
     private final AlternativeQuestionRepository alternativeQuestionRepository;
     private final TrueOrFalseQuestionRepository trueOrFalseQuestionRepository;
+    private final RankRepository rankRepository;
 
 
-    public QuizService(QuizRepository quizRepository, AuthenticationService authenticationService, DirectQuestionRepository directQuestionRepository, AlternativeQuestionRepository alternativeQuestionRepository, TrueOrFalseQuestionRepository trueOrFalseQuestionRepository) {
+    public QuizService(QuizRepository quizRepository, AuthenticationService authenticationService, DirectQuestionRepository directQuestionRepository, AlternativeQuestionRepository alternativeQuestionRepository, TrueOrFalseQuestionRepository trueOrFalseQuestionRepository, RankRepository rankRepository) {
         this.quizRepository = quizRepository;
         this.authenticationService = authenticationService;
         this.directQuestionRepository = directQuestionRepository;
         this.alternativeQuestionRepository = alternativeQuestionRepository;
         this.trueOrFalseQuestionRepository = trueOrFalseQuestionRepository;
+        this.rankRepository = rankRepository;
     }
 
     public Quiz findById(Long quiz) {
@@ -40,7 +43,7 @@ public class QuizService {
     public ResponseEntity<QuizResponseDto> getQuiz(Long id) {
         var quiz = quizRepository.findById(id)
                 .map(QuizDto::new).orElseThrow(() -> new NotFoundException("Quiz Not Found"));
-        QuizResponseDto quizResponseDto = new QuizResponseDto(quiz.nameQuiz(), quiz.visibility(), quiz.accessPassword(),  getQuestions(id));
+        QuizResponseDto quizResponseDto = new QuizResponseDto(quiz.nameQuiz(), quiz.visibility(), quiz.accessPassword(), getQuestions(id));
 
         return ResponseEntity.ok(quizResponseDto);
     }
@@ -100,6 +103,8 @@ public class QuizService {
             }
         }
 
+        int correctAnswers = 0;
+
         List<Object> incorrectQuestions = new ArrayList<>();
 
         // Direct Question Logic
@@ -112,6 +117,8 @@ public class QuizService {
             String answerKey = "Direct-" + directQuestionListDto.id();
             if (!directQuestionListDto.correctAnswer().equalsIgnoreCase(answer.getAnswers().get(answerKey))) {
                 incorrectQuestions.add(directQuestionListDto);
+            } else {
+                correctAnswers++;
             }
         }
 
@@ -125,6 +132,8 @@ public class QuizService {
             String answerKey = "Alternative-" + alternativeQuestionListDto.id();
             if (!alternativeQuestionListDto.correctAnswer().equalsIgnoreCase(answer.getAnswers().get(answerKey))) {
                 incorrectQuestions.add(alternativeQuestionListDto);
+            } else {
+                correctAnswers++;
             }
         }
 
@@ -140,6 +149,8 @@ public class QuizService {
 
             if (trueOrFalseQuestionListDto.correctAnswer() != userAnswer) {
                 incorrectQuestions.add(trueOrFalseQuestionListDto);
+            } else {
+                correctAnswers++;
             }
         }
 
@@ -151,7 +162,21 @@ public class QuizService {
             response.setMessage("There are wrong answers!");
         }
 
+        Rank userRank = new Rank();
+        userRank.setUserName(answer.getUserName());
+        userRank.setCorrectAnswers(correctAnswers);
+        userRank.setQuiz(quiz);
+
+        rankRepository.save(userRank);
         response.setIncorrectQuestion(incorrectQuestions);
         return ResponseEntity.ok(response);
+    }
+
+    public List<Rank> getRankingByQuiz(long quizId) {
+        List<Rank> ranks = rankRepository.findByQuizId(quizId);
+
+        ranks.sort((rank1, rank2) -> rank2.getCorrectAnswers() - rank1.getCorrectAnswers());
+
+        return ranks;
     }
 }

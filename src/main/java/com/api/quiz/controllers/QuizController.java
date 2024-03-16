@@ -4,6 +4,7 @@ import com.api.quiz.dtos.QuizAnswerDto;
 import com.api.quiz.dtos.QuizDto;
 import com.api.quiz.dtos.QuizIncorrectResponseDto;
 import com.api.quiz.dtos.QuizResponseDto;
+import com.api.quiz.entities.Rank;
 import com.api.quiz.services.QuizService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -39,5 +40,10 @@ public class QuizController {
     @PostMapping("/answers")
     public ResponseEntity<QuizIncorrectResponseDto> answerQuiz(@RequestBody QuizAnswerDto answers) {
         return this.quizService.checkQuizAnswers(answers);
+    }
+
+    @GetMapping("/ranking/{quizId}")
+    public List<Rank> getRankingByQuiz(@PathVariable long quizId){
+        return quizService.getRankingByQuiz(quizId);
     }
 }

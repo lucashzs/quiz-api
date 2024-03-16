@@ -92,7 +92,7 @@ public class AuthenticationService {
         securityContext.setAuthentication(authenticationResponse);
         SecurityContextHolder.setContext(securityContext);
 
-        return ResponseEntity.ok().body("Login Successfully");
+        return ResponseEntity.ok().body("Login Successfully!");
     }
 
     public User getCurrentUser() {

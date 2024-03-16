@@ -1,6 +1,7 @@
 package com.api.quiz.entities;
 
 import com.api.quiz.dtos.QuizDto;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -12,13 +13,17 @@ public class Quiz {
     @ManyToOne
     private User user;
 
-    @OneToMany (mappedBy = "quiz")
+    @JsonManagedReference
+    @OneToMany(mappedBy = "quiz")
+    List<Rank> rankList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "quiz")
     List<DirectQuestion> directQuestionList = new ArrayList<>();
 
-    @OneToMany (mappedBy = "quiz")
+    @OneToMany(mappedBy = "quiz")
     List<AlternativeQuestion> alternativeQuestionsList = new ArrayList<>();
 
-    @OneToMany (mappedBy = "quiz")
+    @OneToMany(mappedBy = "quiz")
     List<TrueOrFalseQuestion> trueOrFalseQuestionList = new ArrayList<>();
 
     @Id
@@ -38,6 +43,14 @@ public class Quiz {
     }
 
     public Quiz() {
+    }
+
+    public List<Rank> getRankList() {
+        return rankList;
+    }
+
+    public void setRankList(List<Rank> rankList) {
+        this.rankList = rankList;
     }
 
     public Long getId() {

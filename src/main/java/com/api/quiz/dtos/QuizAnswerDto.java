@@ -1,12 +1,20 @@
 package com.api.quiz.dtos;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.Map;
 
 public class QuizAnswerDto {
 
+    @NotBlank(message = "You need to enter a username!")
     private String userName;
+
     private Map<String, String> answers;
+
+    @NotNull (message = "You need to enter a quiz id!")
     private Long quizId;
+
     private String accessPassword;
 
     public String getAccessPassword() {
