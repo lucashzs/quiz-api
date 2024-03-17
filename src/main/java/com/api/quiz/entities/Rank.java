@@ -10,13 +10,21 @@ public class Rank {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String userName;
-    private int correctAnswers;
+    private String correctAnswers;
 
     @JsonBackReference
     @ManyToOne
     private Quiz quiz;
 
     public Rank() {
+    }
+
+    public String getCorrectAnswers() {
+        return correctAnswers;
+    }
+
+    public void setCorrectAnswers(String correctAnswers) {
+        this.correctAnswers = correctAnswers;
     }
 
     public Quiz getQuiz() {
@@ -41,13 +49,5 @@ public class Rank {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public int getCorrectAnswers() {
-        return correctAnswers;
-    }
-
-    public void setCorrectAnswers(int correctAnswers) {
-        this.correctAnswers = correctAnswers;
     }
 }

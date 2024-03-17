@@ -162,9 +162,14 @@ public class QuizService {
             response.setMessage("There are wrong answers!");
         }
 
+        double totalQuestions = directQuestions.size() + alternativeQuestions.size() + trueOrFalseQuestions.size();
+        double percentageCorrect = (correctAnswers / totalQuestions) * 100;
+
+        String percentageCorrectFormatted = String.format("%.2f", percentageCorrect) + "%";
+
         Rank userRank = new Rank();
         userRank.setUserName(answer.getUserName());
-        userRank.setCorrectAnswers(correctAnswers);
+        userRank.setCorrectAnswers(percentageCorrectFormatted);
         userRank.setQuiz(quiz);
 
         rankRepository.save(userRank);
@@ -175,8 +180,11 @@ public class QuizService {
     public List<Rank> getRankingByQuiz(long quizId) {
         List<Rank> ranks = rankRepository.findByQuizId(quizId);
 
-        ranks.sort((rank1, rank2) -> rank2.getCorrectAnswers() - rank1.getCorrectAnswers());
-
+        ranks.sort((rank1, rank2) -> {
+            String rank1Percentage = rank1.getCorrectAnswers().replace("%", "").replace(",", ".");
+            String rank2Percentage = rank2.getCorrectAnswers().replace("%", "").replace(",", ".");
+            return Double.compare(Double.parseDouble(rank2Percentage), Double.parseDouble(rank1Percentage));
+        });
         return ranks;
     }
 }
