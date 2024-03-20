@@ -1,11 +1,11 @@
 package com.api.quiz.controllers;
 
 import com.api.quiz.dtos.QuizAnswerDto;
+import com.api.quiz.dtos.QuizResponseDto;
+import com.api.quiz.services.QuizService;
 import com.api.quiz.dtos.QuizDto;
 import com.api.quiz.dtos.QuizIncorrectResponseDto;
-import com.api.quiz.dtos.QuizResponseDto;
 import com.api.quiz.entities.Rank;
-import com.api.quiz.services.QuizService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +38,7 @@ public class QuizController {
     }
 
     @PostMapping("/answers")
-    public ResponseEntity<QuizIncorrectResponseDto> answerQuiz(@RequestBody QuizAnswerDto answers) {
+    public ResponseEntity<QuizIncorrectResponseDto> answerQuiz(@RequestBody @Valid QuizAnswerDto answers) {
         return this.quizService.checkQuizAnswers(answers);
     }
 

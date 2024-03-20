@@ -7,14 +7,16 @@ import java.util.Map;
 
 public class QuizAnswerDto {
 
-    @NotBlank(message = "You need to enter a username!")
+    @NotNull (message = "UserName can not be null!")
     private String userName;
 
+    @NotNull (message = "Answers can not be null!")
     private Map<String, String> answers;
 
-    @NotNull (message = "You need to enter a quiz id!")
+    @NotNull (message = "Quiz id can not be null!")
     private Long quizId;
 
+    @NotNull (message = "Access Password can not be null!")
     private String accessPassword;
 
     public String getAccessPassword() {

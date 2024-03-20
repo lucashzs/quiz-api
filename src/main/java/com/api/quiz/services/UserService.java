@@ -16,8 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import static com.api.quiz.services.VerificationsService.validate;
-
 @Service
 public class UserService {
 
@@ -40,7 +38,7 @@ public class UserService {
         newUser.setPassword(passwordEncoder.encode(userDto.password()));
         if (userDto.password().equals(userDto.confirmPassword())) {
             try {
-                validate(userDto.password());
+                VerificationsService.validate(userDto.password());
             } catch (Exception ex) {
                 throw new BadRequestException(ex.getMessage());
             }

@@ -7,11 +7,10 @@ import jakarta.persistence.*;
 public class Rank {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String userName;
     private String correctAnswers;
-
     @JsonBackReference
     @ManyToOne
     private Quiz quiz;

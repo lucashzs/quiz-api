@@ -1,7 +1,7 @@
 package com.api.quiz.repositories;
 
-import com.api.quiz.entities.TrueOrFalseQuestion;
 import com.api.quiz.entities.User;
+import com.api.quiz.entities.TrueOrFalseQuestion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -23,8 +23,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import static com.api.quiz.services.VerificationsService.*;
-
 
 @Service
 public class AuthenticationService {
@@ -44,20 +42,20 @@ public class AuthenticationService {
     public ResponseEntity<Object> register(RegisterUserDto registrationData) {
         User newUser;
 
-        if (!verifyDate(String.valueOf(registrationData.birthDate()))) {
+        if (!VerificationsService.verifyDate(String.valueOf(registrationData.birthDate()))) {
             throw new BadRequestException("Invalid birthDate, put it in the format: dd-mm-yyyy");
         }
         LocalDate date = LocalDate.parse(registrationData.birthDate(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
         LocalDate currentDate = LocalDate.now();
-        int userAge = calculatorAge(registrationData, currentDate);
+        int userAge = VerificationsService.calculatorAge(registrationData, currentDate);
         if (userAge <= 16) {
             throw new BadRequestException("Children under 16 cannot register for the quiz");
         }
 
         if (registrationData.password().equals(registrationData.confirmPassword())) {
             try {
-                validate(registrationData.password());
+                VerificationsService.validate(registrationData.password());
             } catch (Exception ex) {
                 throw new BadRequestException(ex.getMessage());
             }

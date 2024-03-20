@@ -1,7 +1,7 @@
 package com.api.quiz.controllers;
 
-import com.api.quiz.dtos.LoginUserDto;
 import com.api.quiz.dtos.RegisterUserDto;
+import com.api.quiz.dtos.LoginUserDto;
 import com.api.quiz.services.AuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

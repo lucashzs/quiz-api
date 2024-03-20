@@ -1,10 +1,12 @@
 package com.api.quiz.services;
 
 import com.api.quiz.dtos.*;
-import com.api.quiz.entities.Quiz;
-import com.api.quiz.entities.Rank;
 import com.api.quiz.errors.exceptions.BadRequestException;
 import com.api.quiz.errors.exceptions.NotFoundException;
+import com.api.quiz.repositories.*;
+import com.api.quiz.dtos.*;
+import com.api.quiz.entities.Quiz;
+import com.api.quiz.entities.Rank;
 import com.api.quiz.repositories.*;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
