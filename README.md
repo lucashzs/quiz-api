@@ -2,7 +2,7 @@
 
 Quiz Project, project based on a quiz game where users can register and create their quizzes for the entire public, containing alternative, true or false, and direct questions, with a classification in each quiz of the best users based on the correct answers.
 
-## `Basic API information`
+### `Basic API information`
 
 Project made entirely using Spring Boot, using the Postgres database, with its form of authentication being `SecurityConfig` using the `SESSION` method where `Cookies` is used.
 
